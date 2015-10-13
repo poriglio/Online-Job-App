@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require("mongoose");
 
-var model = require("./models/model.js")
+var model = require("./models/model.js");
 
 mongoose.connect("mongodb://localhost/jobapplication");
 
@@ -18,9 +18,18 @@ app.get('/', function(req, res) {
 
 // displays a list of applicants
 app.get('/applicants', function(req, res){
-	res.render('applicants')
-	Applicant.find({})
+	model.Applicant.find({},function(error,data){
+		if(error){console.log("Error! Error!")}
+			else{
+				res.send(data)
+				console.log(data)
+			}
+	})
 });
+
+app.get("/viewapplicants",function(req,res){
+	res.sendFile("/html/applicants.html",{root:"./public"})
+})
 
 // creates and applicant
 app.post('/applicant', function(req, res){
